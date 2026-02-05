@@ -4,6 +4,8 @@ import com.openbiblio.model.EstadoLectura;
 import com.openbiblio.model.Libro;
 import com.openbiblio.repository.LibroRepository;
 import com.openbiblio.repository.SqliteLibroRepository;
+import com.openbiblio.service.CsvExportService;
+import com.openbiblio.service.CsvImportService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +15,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.util.Optional;
 
 public class MainController {
@@ -34,9 +38,9 @@ public class MainController {
         renderRecommendationCards();
     }
 
-    /* =========================================================
+    /* =========================
        AÑADIR LIBRO
-       ========================================================= */
+       ========================= */
 
     @FXML
     private void onAddClicked() {
@@ -49,10 +53,6 @@ public class MainController {
         TextField tfTitulo = new TextField();
         TextField tfAutor = new TextField();
         TextField tfIsbn = new TextField();
-
-        tfTitulo.setPromptText("Título");
-        tfAutor.setPromptText("Autor");
-        tfIsbn.setPromptText("ISBN");
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -68,8 +68,8 @@ public class MainController {
 
         dialog.getDialogPane().setContent(grid);
 
-        dialog.setResultConverter(button -> {
-            if (button == ButtonType.OK) {
+        dialog.setResultConverter(btn -> {
+            if (btn == ButtonType.OK) {
                 return new Libro(tfTitulo.getText(), tfAutor.getText(), tfIsbn.getText());
             }
             return null;
@@ -78,35 +78,77 @@ public class MainController {
         Optional<Libro> result = dialog.showAndWait();
         if (!result.isPresent()) return;
 
-        Libro nuevo = result.get();
+        Libro libro = result.get();
 
-        if (isBlank(nuevo.getTitulo()) || isBlank(nuevo.getAutor()) || isBlank(nuevo.getIsbn())) {
+        if (isBlank(libro.getTitulo()) || isBlank(libro.getAutor()) || isBlank(libro.getIsbn())) {
             showError("Campos obligatorios", "Título, autor e ISBN no pueden estar vacíos.");
             return;
         }
 
         try {
-            repo.insert(nuevo);
+            repo.insert(libro);
         } catch (RuntimeException e) {
-            showError("Error al guardar", "No se pudo guardar el libro.\n¿Puede que el ISBN ya exista?");
+            showError("Error", "No se pudo guardar el libro (ISBN duplicado).");
             return;
         }
 
+        refresh();
+    }
+
+    /* =========================
+       IMPORTAR / EXPORTAR
+       ========================= */
+
+    @FXML
+    private void onExportClicked() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Exportar biblioteca");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV (*.csv)", "*.csv"));
+        fc.setInitialFileName("openbiblio.csv");
+
+        File file = fc.showSaveDialog(addButton.getScene().getWindow());
+        if (file == null) return;
+
+        try {
+            new CsvExportService().export(repo.findAll(), file);
+            showInfo("Exportación completada", "Archivo guardado en:\n" + file.getAbsolutePath());
+        } catch (Exception e) {
+            showError("Error exportando", e.getMessage());
+        }
+    }
+
+    @FXML
+    private void onImportClicked() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Importar biblioteca");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV (*.csv)", "*.csv"));
+
+        File file = fc.showOpenDialog(addButton.getScene().getWindow());
+        if (file == null) return;
+
+        try {
+            int n = new CsvImportService().importToRepository(file, repo);
+            refresh();
+            showInfo("Importación completada", "Libros importados/actualizados: " + n);
+        } catch (Exception e) {
+            showError("Error importando", e.getMessage());
+        }
+    }
+
+    /* =========================
+       UI
+       ========================= */
+
+    private void refresh() {
         libros.setAll(repo.findAll());
         renderLibraryMiniCards();
     }
-
-    /* =========================================================
-       RENDER LIBRERÍA
-       ========================================================= */
 
     private void renderLibraryMiniCards() {
         libraryPane.getChildren().clear();
 
         if (libros.isEmpty()) {
-            Label empty = new Label("No hay libros todavía");
-            empty.setStyle("-fx-text-fill: #666;");
-            libraryPane.getChildren().add(empty);
+            libraryPane.getChildren().add(new Label("No hay libros todavía"));
             return;
         }
 
@@ -117,47 +159,35 @@ public class MainController {
 
     private StackPane makeMiniCover(Libro libro) {
         StackPane card = new StackPane();
-        card.setPrefSize(90, 130);
-        card.setMinSize(90, 130);
-        card.setMaxSize(90, 130);
+        card.setPrefSize(120, 170);
+        card.getStyleClass().add("mini-card");
 
-        // Color según estado
-        String color = libro.getEstado() == EstadoLectura.LEIDO ? "#c8e6c9" : "#eeeeee";
-        card.setStyle("-fx-background-color: " + color +
-                "; -fx-border-color: #cfcfcf; -fx-border-width: 1;");
+        if (libro.getEstado() == EstadoLectura.LEIDO) {
+            card.getStyleClass().add("leido");
+        }
 
-        Label lbl = new Label(shorten(libro.getTitulo(), 18));
+        Label lbl = new Label(shorten(libro.getTitulo(), 25));
         lbl.setWrapText(true);
-        lbl.setStyle("-fx-font-size: 11px; -fx-padding: 8;");
 
         card.getChildren().add(lbl);
-
-        // Click -> editar libro
         card.setOnMouseClicked(e -> openEditDialog(libro));
-
         return card;
     }
 
-    /* =========================================================
-       EDITAR LIBRO (ESTADO + NOTAS)
-       ========================================================= */
-
     private void openEditDialog(Libro libro) {
-        Dialog<Void> dialog = new Dialog<>();
+        Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Editar libro");
         dialog.setHeaderText(libro.getTitulo());
 
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.OK);
+        ButtonType deleteBtn = new ButtonType("ELIMINAR", ButtonBar.ButtonData.LEFT);
+        dialog.getDialogPane().getButtonTypes().addAll(deleteBtn, ButtonType.CANCEL, ButtonType.OK);
 
         ComboBox<EstadoLectura> estadoBox = new ComboBox<>();
         estadoBox.getItems().addAll(EstadoLectura.PENDIENTE, EstadoLectura.LEIDO);
         estadoBox.setValue(libro.getEstado());
 
-        TextArea notasArea = new TextArea();
-        notasArea.setPromptText("Notas personales sobre el libro...");
-        notasArea.setWrapText(true);
+        TextArea notasArea = new TextArea(libro.getNotas() == null ? "" : libro.getNotas());
         notasArea.setPrefRowCount(6);
-        notasArea.setText(libro.getNotas() == null ? "" : libro.getNotas());
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -172,71 +202,79 @@ public class MainController {
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(btn -> {
-            if (btn == ButtonType.OK) {
-                libro.setEstado(estadoBox.getValue());
-                libro.setNotas(notasArea.getText());
-
-                try {
-                    repo.update(libro);
-                } catch (RuntimeException e) {
-                    showError("Error guardando cambios", e.getMessage());
-                }
-            }
-            return null;
+            if (btn == ButtonType.OK) return "SAVE";
+            if (btn == deleteBtn) return "DELETE";
+            return "CANCEL";
         });
 
-        dialog.showAndWait();
+        Optional<String> result = dialog.showAndWait();
+        if (!result.isPresent()) return;
 
-        libros.setAll(repo.findAll());
-        renderLibraryMiniCards();
+        if ("DELETE".equals(result.get())) {
+            // Confirmacion
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                    "¿Seguro que quieres eliminar este libro?\n\n" + libro.getTitulo(),
+                    ButtonType.CANCEL, ButtonType.OK);
+            confirm.setTitle("Confirmar eliminación");
+            confirm.setHeaderText("Eliminar libro");
+
+            Optional<ButtonType> c = confirm.showAndWait();
+            if (c.isPresent() && c.get() == ButtonType.OK) {
+                try {
+                    repo.deleteById(libro.getId());
+                } catch (RuntimeException e) {
+                    showError("Error eliminando", e.getMessage());
+                    return;
+                }
+                refresh();
+            }
+            return;
+        }
+
+        if ("SAVE".equals(result.get())) {
+            libro.setEstado(estadoBox.getValue());
+            libro.setNotas(notasArea.getText());
+
+            try {
+                repo.update(libro);
+            } catch (RuntimeException e) {
+                showError("Error guardando cambios", e.getMessage());
+                return;
+            }
+
+            refresh();
+        }
     }
-
-    /* =========================================================
-       RECOMENDACIONES (MOCK)
-       ========================================================= */
 
     private void renderRecommendationCards() {
         recommendationsPane.getChildren().clear();
-        recommendationsPane.getChildren().add(makeBigCover("Harry Potter y la piedra filosofal"));
-        recommendationsPane.getChildren().add(makeBigCover("Cruce de caminos"));
-        recommendationsPane.getChildren().add(makeBigCover("Los hombres del norte"));
+        recommendationsPane.getChildren().add(new Label("Próximamente..."));
     }
 
-    private VBox makeBigCover(String title) {
-        StackPane cover = new StackPane();
-        cover.setPrefSize(180, 240);
-        cover.setStyle("-fx-background-color: #e1e1e1; -fx-border-color: #cfcfcf;");
-
-        Label lbl = new Label(shorten(title, 30));
-        lbl.setWrapText(true);
-        lbl.setStyle("-fx-font-size: 12px; -fx-padding: 10;");
-
-        cover.getChildren().add(lbl);
-
-        VBox box = new VBox(8);
-        box.getChildren().add(cover);
-        return box;
-    }
-
-    /* =========================================================
-       UTILIDADES
-       ========================================================= */
-
-    private String shorten(String s, int max) {
-        if (s == null) return "";
-        String t = s.trim();
-        return t.length() <= max ? t : t.substring(0, max - 1) + "…";
-    }
+    /* =========================
+       HELPERS
+       ========================= */
 
     private boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
     }
 
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private String shorten(String s, int max) {
+        if (s == null) return "";
+        return s.length() <= max ? s : s.substring(0, max - 1) + "…";
+    }
+
+    private void showError(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(title);
+        a.showAndWait();
+    }
+
+    private void showInfo(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(title);
+        a.showAndWait();
     }
 }

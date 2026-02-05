@@ -1,86 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.openbiblio.ui.controller.MainController"
             styleClass="root">
 
-    <!-- LEFT: Tu biblioteca -->
     <left>
-        <VBox spacing="14" BorderPane.alignment="TOP_LEFT" styleClass="panel">
+        <VBox spacing="12" styleClass="panel">
             <padding>
                 <Insets top="18" right="18" bottom="18" left="18"/>
             </padding>
 
-            <Label text="Tu biblioteca:" styleClass="pill-title"/>
-
-            <FlowPane fx:id="libraryPane" hgap="16" vgap="16" prefWrapLength="300"/>
+            <Label text="Tu biblioteca" styleClass="pill-title"/>
+            <FlowPane fx:id="libraryPane" hgap="16" vgap="16"/>
 
             <Region VBox.vgrow="ALWAYS"/>
 
-            <Button fx:id="addButton"
-                    text="AÑADIR +"
-                    onAction="#onAddClicked"/>
+            <Button fx:id="addButton" text="AÑADIR +" onAction="#onAddClicked"/>
+            <Button text="IMPORTAR" onAction="#onImportClicked"/>
+            <Button text="EXPORTAR" onAction="#onExportClicked"/>
         </VBox>
     </left>
 
-    <!-- CENTER: Buscador + Recomendaciones -->
     <center>
         <VBox spacing="18">
             <padding>
                 <Insets top="22" right="22" bottom="22" left="22"/>
             </padding>
 
-            <!-- Header -->
-            <HBox spacing="30" fillHeight="true">
-
-                <!-- Bloque título: no crece (se mantiene) -->
-                <VBox spacing="6" HBox.hgrow="NEVER" styleClass="header-title">
+            <HBox spacing="30">
+                <VBox spacing="6">
                     <Label text="MiBiblioteca" styleClass="brand"/>
-                    <Label text="For the best readers." styleClass="subtitle"/>
+                    <Label text="Para los mejores lectores." styleClass="subtitle"/>
                 </VBox>
-
-                <!-- Separador flexible para dar aire (opcional) -->
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <!-- Texto largo: wrap y ocupa lo que pueda -->
-                <Label wrapText="true"
-                       maxWidth="520"
-                       text="Bienvenido a MiBiblioteca, tu espacio personal para organizar, guardar y disfrutar de tus libros favoritos. Esta plataforma te permite crear tu propia biblioteca digital, donde puedes añadir los títulos que posees, registrar tus lecturas, marcar tus libros pendientes y escribir reseñas o notas personales."
-                       styleClass="intro"/>
+                <Label styleClass="intro"
+                       wrapText="true"
+                       text="Gestiona tu biblioteca personal: añade libros, marca los que has leído, escribe notas y exporta tu colección."/>
             </HBox>
 
-            <!-- Buscador -->
             <VBox spacing="8">
-                <Label text="Encuentra tus libros favoritos:" styleClass="section-title"/>
-                <TextField fx:id="searchField"
-                           promptText="Buscar por título, autor, ISBN..."
-                           styleClass="search"/>
+                <Label text="Buscar libros" styleClass="section-title"/>
+                <TextField fx:id="searchField" styleClass="search"/>
             </VBox>
 
-            <!-- Recomendaciones -->
-            <VBox spacing="10">
-                <Label text="Recomendaciones de la semana:" styleClass="section-title"/>
-
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
-                    <content>
-                        <FlowPane fx:id="recommendationsPane" hgap="18" vgap="18" prefWrapLength="700" styleClass="cards"/>
-                    </content>
-                </ScrollPane>
-            </VBox>
-
+            <ScrollPane fitToWidth="true">
+                <content>
+                    <FlowPane fx:id="recommendationsPane" hgap="18" vgap="18"/>
+                </content>
+            </ScrollPane>
         </VBox>
     </center>
-
 </BorderPane>
