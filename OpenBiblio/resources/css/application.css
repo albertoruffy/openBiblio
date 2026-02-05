@@ -1,74 +1,145 @@
+/* =========================
+   BASE
+   ========================= */
 .root {
-    -fx-background-color: #f3f3f3;
-    -fx-font-family: "System";
+    -fx-font-family: "Segoe UI", "San Francisco", Arial, sans-serif;
+    -fx-background-color: #f4f6f8;
 }
 
+/* =========================
+   PANEL IZQUIERDO
+   ========================= */
 .panel {
-    -fx-background-color: #f7f7f7;
-    -fx-border-color: #d9d9d9;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
     -fx-border-width: 0 1 0 0;
-    -fx-min-width: 260px;
+    -fx-min-width: 300px;
+    -fx-max-width: 340px;
 }
 
-.content {
-    -fx-background-color: transparent;
-}
-
-.brand {
-    -fx-font-size: 40px;
+.pill-title {
+    -fx-font-size: 18px;
     -fx-font-weight: 800;
+    -fx-text-fill: #222;
+}
+
+/* =========================
+   BOTONES
+   ========================= */
+.button {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-background-radius: 8;
+    -fx-padding: 10 16;
+}
+
+.button:hover { -fx-background-color: #1565c0; }
+.button:pressed { -fx-background-color: #0d47a1; }
+
+#addButton {
+    -fx-background-color: #2e7d32;
+}
+#addButton:hover { -fx-background-color: #1b5e20; }
+
+/* =========================
+   HEADER
+   ========================= */
+.brand {
+    -fx-font-size: 44px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #111;
+    -fx-text-overrun: clip; /* sin "..." */
 }
 
 .subtitle {
-    -fx-font-size: 26px;
-    -fx-font-weight: 400;
+    -fx-font-size: 22px;
+    -fx-text-fill: #444;
+    -fx-text-overrun: clip; /* sin "..." */
 }
 
 .intro {
     -fx-font-size: 14px;
     -fx-text-fill: #333;
-    -fx-max-width: 520px;
+    -fx-line-spacing: 1px;
 }
 
 .section-title {
     -fx-font-size: 22px;
-    -fx-font-weight: 800;
+    -fx-font-weight: 900;
     -fx-underline: true;
+    -fx-text-fill: #111;
 }
 
+/* =========================
+   BUSCADOR
+   ========================= */
 .search {
     -fx-background-radius: 999px;
     -fx-border-radius: 999px;
     -fx-border-color: #cfcfcf;
     -fx-border-width: 1px;
-    -fx-padding: 10 16 10 16;
+    -fx-padding: 10 16;
     -fx-font-size: 14px;
-    -fx-background-color: #efefef;
+    -fx-background-color: #ffffff;
 }
 
-.pill-title {
-    -fx-background-color: #efefef;
-    -fx-border-color: #cfcfcf;
-    -fx-border-radius: 999px;
-    -fx-background-radius: 999px;
-    -fx-padding: 8 14 8 14;
-    -fx-font-weight: 700;
+.search:focused {
+    -fx-border-color: #1976d2;
 }
 
-.pill-button {
-    -fx-background-radius: 999px;
-    -fx-border-radius: 999px;
+/* =========================
+   MINI CARDS (LIBROS)
+   ========================= */
+#libraryPane {
+    -fx-padding: 10 0 0 0;
+}
+
+.mini-card {
+    -fx-background-color: #eeeeee;
     -fx-border-color: #cfcfcf;
     -fx-border-width: 1px;
-    -fx-background-color: #efefef;
-    -fx-padding: 10 18 10 18;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.mini-card:hover {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 2);
+}
+
+.mini-card .label {
+    -fx-text-fill: #222;
+    -fx-font-size: 13px;
     -fx-font-weight: 800;
+    -fx-padding: 10;
+    -fx-alignment: center;
 }
 
-.scroll {
-    -fx-background-color: transparent;
+/* Estado leído (lo aplicamos desde código con getStyleClass().add("leido")) */
+.leido {
+    -fx-background-color: #c8e6c9;
 }
 
+/* =========================
+   RECOMENDACIONES
+   ========================= */
 .cards {
     -fx-padding: 6 0 6 0;
+}
+
+/* =========================
+   DIALOGOS
+   ========================= */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+}
+.dialog-pane .label {
+    -fx-font-weight: 800;
+}
+.dialog-pane .text-field,
+.dialog-pane .text-area,
+.dialog-pane .combo-box {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
 }
