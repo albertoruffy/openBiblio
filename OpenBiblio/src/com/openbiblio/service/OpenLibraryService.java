@@ -78,7 +78,66 @@ public class OpenLibraryService {
 
         return resultados;
     }
+    public List<Libro> buscarRecomendaciones(String autor) throws Exception {
 
+        List<Libro> resultados = new ArrayList<>();
+
+        String query = URLEncoder.encode(autor, "UTF-8");
+
+        String urlString =
+                "https://openlibrary.org/search.json?author="
+                        + query
+                        + "&limit=5";
+
+        URL url = new URL(urlString);
+
+        HttpURLConnection con =
+                (HttpURLConnection) url.openConnection();
+
+        con.setRequestMethod("GET");
+
+        con.setConnectTimeout(5000);
+        con.setReadTimeout(5000);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "UTF-8")
+        );
+
+        StringBuilder response = new StringBuilder();
+
+        String line;
+
+        while ((line = in.readLine()) != null) {
+            response.append(line);
+        }
+
+        in.close();
+
+        String json = response.toString();
+
+        String[] bloques = json.split("\"title\":\"");
+
+        for (int i = 1; i < bloques.length && resultados.size() < 5; i++) {
+
+            String bloque = bloques[i];
+
+            String titulo = bloque.substring(0, bloque.indexOf("\""));
+
+            if (titulo.trim().isEmpty()) {
+                continue;
+            }
+
+            Libro libro = new Libro(
+                    titulo,
+                    autor,
+                    "REC-" + i + "-" + System.currentTimeMillis()
+            );
+
+            resultados.add(libro);
+        }
+
+        return resultados;
+    }
     public Libro buscarPrimerResultado(String busqueda) throws Exception {
         List<Libro> libros = buscarLibros(busqueda);
 

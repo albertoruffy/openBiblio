@@ -61,7 +61,16 @@
                           style="-fx-padding: 10;"/>
             </ScrollPane>
 
-            <Label text="Recomendaciones" styleClass="section-title"/>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+
+			    <Label text="Recomendaciones"
+           		styleClass="section-title"/>
+
+    			<Button text="↻ Refrescar"
+            	onAction="#onRefreshRecommendations"
+            	styleClass="primary-button"/>
+
+			</HBox>
 
             <FlowPane fx:id="recommendationsPane"
                       hgap="18"

@@ -19,6 +19,7 @@ import javafx.stage.FileChooser;
 import java.util.List;
 import java.io.File;
 import java.util.Optional;
+import java.util.Random;
 
 public class MainController {
 
@@ -176,6 +177,7 @@ public class MainController {
     private void refresh() {
         libros.setAll(repo.buscar());
         renderLibraryMiniCards();
+        renderRecommendationCards();
     }
 
     private void renderLibraryMiniCards() {
@@ -190,7 +192,10 @@ public class MainController {
             libraryPane.getChildren().add(makeMiniCover(libro));
         }
     }
-
+    @FXML
+    private void onRefreshRecommendations() {
+        renderRecommendationCards();
+    }
     private VBox makeMiniCover(Libro libro) {
 
         VBox card = new VBox(8);
@@ -301,8 +306,83 @@ public class MainController {
     }
 
     private void renderRecommendationCards() {
+
         recommendationsPane.getChildren().clear();
-        recommendationsPane.getChildren().add(new Label("Próximamente..."));
+
+        if (libros.isEmpty()) {
+
+            recommendationsPane.getChildren().add(
+                    new Label("Añade libros para obtener recomendaciones")
+            );
+
+            return;
+        }
+
+        try {
+
+        	Libro base = libros.get(new Random().nextInt(libros.size()));
+
+            OpenLibraryService service = new OpenLibraryService();
+
+            java.util.List<Libro> recomendaciones =
+                    service.buscarRecomendaciones(base.getAutor());
+
+            for (Libro libro : recomendaciones) {
+            	if (existeEnBiblioteca(libro)) {
+            	    continue;
+            	}
+
+                VBox card = new VBox(8);
+
+                card.getStyleClass().add("book-card");
+
+                Label titulo = new Label(libro.getTitulo());
+                titulo.getStyleClass().add("book-title");
+                titulo.setWrapText(true);
+
+                Label autor = new Label(libro.getAutor());
+                autor.getStyleClass().add("book-author");
+
+                Button addBtn = new Button("Añadir");
+                addBtn.getStyleClass().add("primary-button");
+
+                addBtn.setOnAction(e -> {
+
+                    try {
+
+                        repo.insertar(libro);
+
+                        refresh();
+
+                        showInfo(
+                                "Libro añadido",
+                                libro.getTitulo() + " añadido correctamente"
+                        );
+
+                    } catch (Exception ex) {
+
+                        showError(
+                                "Error",
+                                "No se pudo añadir el libro"
+                        );
+                    }
+                });
+
+                card.getChildren().addAll(
+                        titulo,
+                        autor,
+                        addBtn
+                );
+
+                recommendationsPane.getChildren().add(card);
+            }
+
+        } catch (Exception e) {
+
+            recommendationsPane.getChildren().add(
+                    new Label("No se pudieron cargar recomendaciones")
+            );
+        }
     }
 
     /* =========================
@@ -312,7 +392,23 @@ public class MainController {
     private boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
     }
+    private boolean existeEnBiblioteca(Libro recomendado) {
+        for (Libro libro : libros) {
+            if (libro.getTitulo() != null
+                    && recomendado.getTitulo() != null
+                    && libro.getTitulo().trim().equalsIgnoreCase(recomendado.getTitulo().trim())) {
+                return true;
+            }
 
+            if (libro.getIsbn() != null
+                    && recomendado.getIsbn() != null
+                    && libro.getIsbn().trim().equalsIgnoreCase(recomendado.getIsbn().trim())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     private String shorten(String s, int max) {
         if (s == null) return "";
         return s.length() <= max ? s : s.substring(0, max - 1) + "…";
