@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface LibroRepository {
 
-    List<Libro> findAll();
+    List<Libro> buscar();
 
-    Optional<Libro> findByIsbn(String isbn);
+    Optional<Libro> buscaPorIsbn(String isbn);
 
-    Libro insert(Libro libro);
+    Libro insertar(Libro libro);
 
     boolean update(Libro libro);
 

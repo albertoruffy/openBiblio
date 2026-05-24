@@ -1,145 +1,107 @@
-/* =========================
-   BASE
-   ========================= */
-.root {
-    -fx-font-family: "Segoe UI", "San Francisco", Arial, sans-serif;
-    -fx-background-color: #f4f6f8;
-}
-
-/* =========================
-   PANEL IZQUIERDO
-   ========================= */
-.panel {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 1 0 0;
-    -fx-min-width: 300px;
-    -fx-max-width: 340px;
-}
-
-.pill-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: 800;
-    -fx-text-fill: #222;
-}
-
-/* =========================
-   BOTONES
-   ========================= */
-.button {
-    -fx-background-color: #1976d2;
+.nav-button-active {
+    -fx-background-color: #f97316;
     -fx-text-fill: white;
-    -fx-font-weight: 800;
-    -fx-background-radius: 8;
-    -fx-padding: 10 16;
 }
 
-.button:hover { -fx-background-color: #1565c0; }
-.button:pressed { -fx-background-color: #0d47a1; }
-
-#addButton {
-    -fx-background-color: #2e7d32;
-}
-#addButton:hover { -fx-background-color: #1b5e20; }
-
-/* =========================
-   HEADER
-   ========================= */
-.brand {
-    -fx-font-size: 44px;
-    -fx-font-weight: 900;
-    -fx-text-fill: #111;
-    -fx-text-overrun: clip; /* sin "..." */
+.sidebar {
+    -fx-background-color: #1f2937;
+    -fx-padding: 28 20;
 }
 
-.subtitle {
-    -fx-font-size: 22px;
-    -fx-text-fill: #444;
-    -fx-text-overrun: clip; /* sin "..." */
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
 }
 
-.intro {
-    -fx-font-size: 14px;
-    -fx-text-fill: #333;
-    -fx-line-spacing: 1px;
-}
-
-.section-title {
-    -fx-font-size: 22px;
-    -fx-font-weight: 900;
-    -fx-underline: true;
-    -fx-text-fill: #111;
-}
-
-/* =========================
-   BUSCADOR
-   ========================= */
-.search {
-    -fx-background-radius: 999px;
-    -fx-border-radius: 999px;
-    -fx-border-color: #cfcfcf;
-    -fx-border-width: 1px;
-    -fx-padding: 10 16;
-    -fx-font-size: 14px;
-    -fx-background-color: #ffffff;
-}
-
-.search:focused {
-    -fx-border-color: #1976d2;
-}
-
-/* =========================
-   MINI CARDS (LIBROS)
-   ========================= */
-#libraryPane {
-    -fx-padding: 10 0 0 0;
-}
-
-.mini-card {
-    -fx-background-color: #eeeeee;
-    -fx-border-color: #cfcfcf;
-    -fx-border-width: 1px;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-}
-
-.mini-card:hover {
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 2);
-}
-
-.mini-card .label {
-    -fx-text-fill: #222;
+.sidebar-subtitle {
+    -fx-text-fill: #d1d5db;
     -fx-font-size: 13px;
-    -fx-font-weight: 800;
-    -fx-padding: 10;
-    -fx-alignment: center;
 }
 
-/* Estado leído (lo aplicamos desde código con getStyleClass().add("leido")) */
-.leido {
-    -fx-background-color: #c8e6c9;
+.content {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 30;
 }
 
-/* =========================
-   RECOMENDACIONES
-   ========================= */
-.cards {
-    -fx-padding: 6 0 6 0;
+.primary-button {
+    -fx-background-color: #f97316;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 11 18;
 }
 
-/* =========================
-   DIALOGOS
-   ========================= */
-.dialog-pane {
-    -fx-background-color: #ffffff;
+.primary-button:hover {
+    -fx-background-color: #ea580c;
 }
-.dialog-pane .label {
-    -fx-font-weight: 800;
+.flow-pane {
+    -fx-hgap: 18;
+    -fx-vgap: 18;
 }
-.dialog-pane .text-field,
-.dialog-pane .text-area,
-.dialog-pane .combo-box {
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
+
+.book-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-padding: 18;
+    -fx-pref-width: 180;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.08),
+        18,
+        0,
+        0,
+        4
+    );
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 18;
+}
+
+.book-card:hover {
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(249,115,22,0.25),
+        24,
+        0,
+        0,
+        6
+    );
+
+    -fx-translate-y: -2;
+}
+
+.book-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.book-author {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
+}
+
+.book-meta {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9ca3af;
+}
+
+.status-read {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #166534;
+    -fx-padding: 4 10;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.status-pending {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+    -fx-padding: 4 10;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
 }

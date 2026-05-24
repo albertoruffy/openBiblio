@@ -44,12 +44,12 @@ public class CsvImportService {
 
             Libro libro = new Libro(0, titulo, autor, isbn, genero, estado, notas);
 
-            Optional<Libro> existing = repo.findByIsbn(isbn);
+            Optional<Libro> existing = repo.buscaPorIsbn(isbn);
             if (existing.isPresent()) {
                 libro.setId(existing.get().getId());
                 repo.update(libro);
             } else {
-                repo.insert(libro);
+                repo.insertar(libro);
             }
 
             importedOrUpdated++;

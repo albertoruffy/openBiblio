@@ -19,7 +19,7 @@ public final class DB {
     private DB() {}
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL);
+    	return DriverManager.getConnection(DB_URL);
     }
 
     public static void init() {

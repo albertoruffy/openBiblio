@@ -1,5 +1,5 @@
 package com.openbiblio.ui.controller;
-
+import javafx.scene.layout.StackPane;
 import com.openbiblio.model.EstadoLectura;
 import com.openbiblio.model.Libro;
 import com.openbiblio.repository.LibroRepository;
@@ -33,7 +33,7 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        libros.setAll(repo.findAll());
+        libros.setAll(repo.buscar());
         renderLibraryMiniCards();
         renderRecommendationCards();
     }
@@ -86,7 +86,7 @@ public class MainController {
         }
 
         try {
-            repo.insert(libro);
+            repo.insertar(libro);
         } catch (RuntimeException e) {
             showError("Error", "No se pudo guardar el libro (ISBN duplicado).");
             return;
@@ -110,7 +110,7 @@ public class MainController {
         if (file == null) return;
 
         try {
-            new CsvExportService().export(repo.findAll(), file);
+            new CsvExportService().export(repo.buscar(), file);
             showInfo("Exportación completada", "Archivo guardado en:\n" + file.getAbsolutePath());
         } catch (Exception e) {
             showError("Error exportando", e.getMessage());
@@ -140,7 +140,7 @@ public class MainController {
        ========================= */
 
     private void refresh() {
-        libros.setAll(repo.findAll());
+        libros.setAll(repo.buscar());
         renderLibraryMiniCards();
     }
 
@@ -157,20 +157,40 @@ public class MainController {
         }
     }
 
-    private StackPane makeMiniCover(Libro libro) {
-        StackPane card = new StackPane();
-        card.setPrefSize(120, 170);
-        card.getStyleClass().add("mini-card");
+    private VBox makeMiniCover(Libro libro) {
+
+        VBox card = new VBox(8);
+        card.setPrefWidth(180);
+
+        card.getStyleClass().add("book-card");
+
+        Label titulo = new Label(shorten(libro.getTitulo(), 35));
+        titulo.setWrapText(true);
+        titulo.getStyleClass().add("book-title");
+
+        Label autor = new Label(libro.getAutor());
+        autor.getStyleClass().add("book-author");
+
+        Label isbn = new Label("ISBN: " + libro.getIsbn());
+        isbn.getStyleClass().add("book-meta");
+
+        Label estado = new Label(libro.getEstado().toString());
 
         if (libro.getEstado() == EstadoLectura.LEIDO) {
-            card.getStyleClass().add("leido");
+            estado.getStyleClass().add("status-read");
+        } else {
+            estado.getStyleClass().add("status-pending");
         }
 
-        Label lbl = new Label(shorten(libro.getTitulo(), 25));
-        lbl.setWrapText(true);
+        card.getChildren().addAll(
+                titulo,
+                autor,
+                isbn,
+                estado
+        );
 
-        card.getChildren().add(lbl);
         card.setOnMouseClicked(e -> openEditDialog(libro));
+
         return card;
     }
 
