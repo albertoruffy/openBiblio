@@ -1,11 +1,12 @@
 package com.openbiblio.ui.controller;
-import javafx.scene.layout.StackPane;
+
 import com.openbiblio.model.EstadoLectura;
 import com.openbiblio.model.Libro;
 import com.openbiblio.repository.LibroRepository;
 import com.openbiblio.repository.SqliteLibroRepository;
 import com.openbiblio.service.CsvExportService;
 import com.openbiblio.service.CsvImportService;
+import com.openbiblio.service.OpenLibraryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,10 +14,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-
+import java.util.List;
 import java.io.File;
 import java.util.Optional;
 
@@ -38,10 +38,24 @@ public class MainController {
         renderRecommendationCards();
     }
 
-    /* =========================
-       AÑADIR LIBRO
-       ========================= */
 
+    @FXML
+    private void onExportClicked() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Exportar biblioteca");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV (*.csv)", "*.csv"));
+        fc.setInitialFileName("openbiblio.csv");
+
+        File file = fc.showSaveDialog(addButton.getScene().getWindow());
+        if (file == null) return;
+
+        try {
+            new CsvExportService().export(repo.buscar(), file);
+            showInfo("Exportación completada", "Archivo guardado en:\n" + file.getAbsolutePath());
+        } catch (Exception e) {
+            showError("Error exportando", e.getMessage());
+        }
+    }
     @FXML
     private void onAddClicked() {
         Dialog<Libro> dialog = new Dialog<>();
@@ -54,6 +68,48 @@ public class MainController {
         TextField tfAutor = new TextField();
         TextField tfIsbn = new TextField();
 
+        Button buscarOnlineButton = new Button("Buscar online");
+        buscarOnlineButton.getStyleClass().add("primary-button");
+
+        buscarOnlineButton.setOnAction(e -> {
+            String busqueda = tfTitulo.getText();
+
+            if (isBlank(busqueda)) {
+                showError("Búsqueda vacía", "Escribe primero un título para buscar online.");
+                return;
+            }
+
+            try {
+            	List<Libro> encontrados = new OpenLibraryService().buscarLibros(busqueda);
+
+            	if (encontrados.isEmpty()) {
+            	    showError("Sin resultados", "No se encontró ningún libro con ese título.");
+            	    return;
+            	}
+
+            	ChoiceDialog<Libro> selector = new ChoiceDialog<>(encontrados.get(0), encontrados);
+            	selector.setTitle("Resultados encontrados");
+            	selector.setHeaderText("Selecciona el libro correcto");
+            	selector.setContentText("Libro:");
+
+            	Optional<Libro> seleccionado = selector.showAndWait();
+
+            	if (!seleccionado.isPresent()) {
+            	    return;
+            	}
+
+            	Libro encontrado = seleccionado.get();
+
+            	tfTitulo.setText(encontrado.getTitulo());
+            	tfAutor.setText(encontrado.getAutor());
+            	tfIsbn.setText(encontrado.getIsbn());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showError("Error de conexión", "No se pudo consultar Open Library:\n" + ex.getMessage());
+            }
+        });
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -65,6 +121,7 @@ public class MainController {
         grid.add(tfAutor, 1, 1);
         grid.add(new Label("ISBN:"), 0, 2);
         grid.add(tfIsbn, 1, 2);
+        grid.add(buscarOnlineButton, 1, 3);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -94,29 +151,6 @@ public class MainController {
 
         refresh();
     }
-
-    /* =========================
-       IMPORTAR / EXPORTAR
-       ========================= */
-
-    @FXML
-    private void onExportClicked() {
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Exportar biblioteca");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV (*.csv)", "*.csv"));
-        fc.setInitialFileName("openbiblio.csv");
-
-        File file = fc.showSaveDialog(addButton.getScene().getWindow());
-        if (file == null) return;
-
-        try {
-            new CsvExportService().export(repo.buscar(), file);
-            showInfo("Exportación completada", "Archivo guardado en:\n" + file.getAbsolutePath());
-        } catch (Exception e) {
-            showError("Error exportando", e.getMessage());
-        }
-    }
-
     @FXML
     private void onImportClicked() {
         FileChooser fc = new FileChooser();
