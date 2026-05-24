@@ -23,6 +23,7 @@ public class MainApp extends Application {
 
         primaryStage.setTitle("OpenBiblio");
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
