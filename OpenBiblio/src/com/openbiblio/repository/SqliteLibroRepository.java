@@ -12,8 +12,9 @@ import java.util.Optional;
 public class SqliteLibroRepository implements LibroRepository {
 
     @Override
-    public List<Libro> findAll() {
+    public List<Libro> buscar() {
         String sql = "SELECT id, titulo, autor, isbn, genero, estado, notas FROM libros ORDER BY titulo ASC";
+        System.out.println("Ejecutando SQL: " + sql);
         List<Libro> result = new ArrayList<>();
 
         try (Connection conn = DB.getConnection();
@@ -31,8 +32,9 @@ public class SqliteLibroRepository implements LibroRepository {
     }
 
     @Override
-    public Optional<Libro> findByIsbn(String isbn) {
+    public Optional<Libro> buscaPorIsbn(String isbn) {
         String sql = "SELECT id, titulo, autor, isbn, genero, estado, notas FROM libros WHERE isbn = ?";
+        
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -49,9 +51,10 @@ public class SqliteLibroRepository implements LibroRepository {
     }
 
     @Override
-    public Libro insert(Libro libro) {
+    public Libro insertar(Libro libro) {
         String sql = "INSERT INTO libros (titulo, autor, isbn, genero, estado, notas) VALUES (?, ?, ?, ?, ?, ?)";
-
+        System.out.println("Ejecutando SQL: " + sql);
+        
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -80,7 +83,7 @@ public class SqliteLibroRepository implements LibroRepository {
     @Override
     public boolean update(Libro libro) {
         String sql = "UPDATE libros SET titulo=?, autor=?, isbn=?, genero=?, estado=?, notas=? WHERE id=?";
-
+        System.out.println("Ejecutando SQL: " + sql);
         try (Connection conn = DB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

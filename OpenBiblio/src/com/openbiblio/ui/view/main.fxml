@@ -1,57 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.openbiblio.ui.controller.MainController"
-            styleClass="root">
+            stylesheets="@application.css">
 
     <left>
-        <VBox spacing="12" styleClass="panel">
-            <padding>
-                <Insets top="18" right="18" bottom="18" left="18"/>
-            </padding>
+        <VBox spacing="20" styleClass="sidebar" prefWidth="230">
+            <Label text="MiBiblioteca" styleClass="sidebar-title"/>
+            <Label text="Gestor personal de libros" styleClass="sidebar-subtitle"/>
 
-            <Label text="Tu biblioteca" styleClass="pill-title"/>
-            <FlowPane fx:id="libraryPane" hgap="16" vgap="16"/>
+            <VBox spacing="8">
+                <Button text="Biblioteca" styleClass="nav-button nav-button-active"/>
+                <Button text="Añadir libro"
+                        fx:id="addButton"
+                        onAction="#onAddClicked"
+                        styleClass="nav-button"/>
 
-            <Region VBox.vgrow="ALWAYS"/>
+                <Button text="Exportar Biblio"
+                        onAction="#onExportClicked"
+                        styleClass="nav-button"/>
 
-            <Button fx:id="addButton" text="AÑADIR +" onAction="#onAddClicked"/>
-            <Button text="IMPORTAR" onAction="#onImportClicked"/>
-            <Button text="EXPORTAR" onAction="#onExportClicked"/>
+                <Button text="Importar Biblio"
+                        onAction="#onImportClicked"
+                        styleClass="nav-button"/>
+            </VBox>
         </VBox>
     </left>
 
     <center>
-        <VBox spacing="18">
-            <padding>
-                <Insets top="22" right="22" bottom="22" left="22"/>
-            </padding>
+        <VBox spacing="24" styleClass="content">
 
-            <HBox spacing="30">
-                <VBox spacing="6">
-                    <Label text="MiBiblioteca" styleClass="brand"/>
-                    <Label text="Para los mejores lectores." styleClass="subtitle"/>
-                </VBox>
-                <Label styleClass="intro"
-                       wrapText="true"
-                       text="Gestiona tu biblioteca personal: añade libros, marca los que has leído, escribe notas y exporta tu colección."/>
-            </HBox>
-
-            <VBox spacing="8">
-                <Label text="Buscar libros" styleClass="section-title"/>
-                <TextField fx:id="searchField" styleClass="search"/>
+            <VBox spacing="6">
+                <Label text="Tu biblioteca" styleClass="page-title"/>
+                <Label text="Organiza tus libros, lecturas pendientes y notas personales"
+                       styleClass="page-subtitle"/>
             </VBox>
 
-            <ScrollPane fitToWidth="true">
-                <content>
-                    <FlowPane fx:id="recommendationsPane" hgap="18" vgap="18"/>
-                </content>
+            <HBox spacing="12">
+                <TextField fx:id="searchField"
+                           promptText="Buscar por título, autor o ISBN..."
+                           HBox.hgrow="ALWAYS"
+                           styleClass="search-field"/>
+
+                <Button text="+ Añadir libro"
+                        onAction="#onAddClicked"
+                        styleClass="primary-button"/>
+            </HBox>
+
+            <Label text="Libros guardados" styleClass="section-title"/>
+
+            <ScrollPane fitToWidth="true"
+                        style="-fx-background-color: transparent; -fx-background: transparent;">
+                <FlowPane fx:id="libraryPane"
+                          hgap="18"
+                          vgap="18"
+                          style="-fx-padding: 10;"/>
             </ScrollPane>
+
+            <Label text="Recomendaciones" styleClass="section-title"/>
+
+            <FlowPane fx:id="recommendationsPane"
+                      hgap="18"
+                      vgap="18"
+                      style="-fx-padding: 10;"/>
+
         </VBox>
     </center>
+
 </BorderPane>
