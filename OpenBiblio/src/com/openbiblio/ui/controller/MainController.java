@@ -20,6 +20,7 @@ import java.util.List;
 import java.io.File;
 import java.util.Optional;
 import java.util.Random;
+import com.openbiblio.service.FtpBackupService;
 
 public class MainController {
 
@@ -302,6 +303,69 @@ public class MainController {
             }
 
             refresh();
+        }
+    }
+    @FXML
+    private void onBackupOnlineClicked() {
+
+        System.out.println("BOTÓN BACKUP PULSADO");
+
+        try {
+
+            File tempFile = new File("openbiblio_backup.csv");
+
+            System.out.println("Creando CSV en: " + tempFile.getAbsolutePath());
+
+            new CsvExportService().export(
+                    repo.buscar(),
+                    tempFile
+            );
+
+            System.out.println("CSV existe: " + tempFile.exists());
+            System.out.println("CSV tamaño: " + tempFile.length() + " bytes");
+
+            new FtpBackupService().subirBackup(tempFile);
+
+            System.out.println("Backup subido correctamente");
+
+            showInfo(
+                    "Backup completado",
+                    "La biblioteca se ha subido correctamente al servidor online."
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            showError(
+                    "Error backup",
+                    e.getMessage()
+            );
+        }
+    }
+    @FXML
+    private void onRestoreOnlineClicked() {
+        try {
+            File tempFile = new File("openbiblio_backup_restaurado.csv");
+
+            new FtpBackupService().descargarBackup(tempFile);
+
+            int n = new CsvImportService().importToRepository(tempFile, repo);
+
+            refresh();
+
+            showInfo(
+                    "Restauración completada",
+                    "Libros restaurados/actualizados: " + n
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            showError(
+                    "Error restaurando backup",
+                    e.getMessage()
+            );
         }
     }
 

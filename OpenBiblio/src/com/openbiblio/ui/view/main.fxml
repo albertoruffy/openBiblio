@@ -27,6 +27,12 @@
                 <Button text="Importar Biblio"
                         onAction="#onImportClicked"
                         styleClass="nav-button"/>
+                <Button text="Backup Online"
+        			styleClass="nav-button"
+        			onAction="#onBackupOnlineClicked"/>
+        		<Button text="Restaurar Backup"
+        			styleClass="nav-button"
+        			onAction="#onRestoreOnlineClicked"/>
             </VBox>
         </VBox>
     </left>
