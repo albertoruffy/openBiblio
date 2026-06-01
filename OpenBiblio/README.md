@@ -1,67 +1,51 @@
-# OpenBiblio
+OpenBiblio
 
-OpenBiblio es una aplicación de escritorio desarrollada en Java para la gestión de bibliotecas. El proyecto ha sido realizado como práctica de la asignatura de Informática I y tiene como objetivo aplicar los conocimientos adquiridos sobre programación orientada a objetos, diseño de interfaces gráficas y trabajo colaborativo mediante Git.
+OpenBiblio es una aplicación de escritorio desarrollada en Java para gestionar una biblioteca personal.
 
-La aplicación permite gestionar usuarios, libros, ejemplares, préstamos y devoluciones desde una interfaz gráfica desarrollada con JavaFX.
+La idea principal del proyecto es que el usuario pueda llevar un control de su propia colección de libros desde una aplicación local, sin depender necesariamente de plataformas externas. Desde la interfaz se pueden registrar libros, consultar la información guardada, modificar datos, añadir notas personales y visualizar el estado general de la biblioteca.
 
-## Funcionalidades
+Funcionalidades
 
-Actualmente la aplicación incluye las siguientes funcionalidades:
+Actualmente el proyecto está orientado a las siguientes funcionalidades:
 
-- Gestión de usuarios.
-- Gestión de libros y ejemplares.
-- Registro de préstamos.
-- Registro de devoluciones.
-- Búsqueda de información.
-- Interfaz gráfica desarrollada con JavaFX.
-- Sistema de control de licencias.
+* Registro de libros personales.
+* Edición y eliminación de libros.
+* Búsqueda y filtrado por título, autor, género o ISBN.
+* Consulta del detalle de cada libro.
+* Gestión del estado de lectura.
+* Añadir notas personales o citas.
+* Exportación de listados.
+* Recomendaciones o enlaces relacionados con libros.
+* Interfaz gráfica desarrollada con JavaFX.
 
-## Capturas de pantalla
+* Tecnologías utilizadas
 
-### Pantalla principal
+El proyecto ha sido desarrollado utilizando principalmente:
 
-![Pantalla principal](docs/img/inicio.png)
+* Java 8
+* JavaFX
+* SQLite
+* Maven
+* Git
+* GitHub
 
-### Gestión de usuarios
+Diseño de la aplicación
 
-![Gestión de usuarios](docs/img/usuarios.png)
+La aplicación sigue una estructura basada en el patrón Modelo-Vista-Controlador. Esta organización permite separar la parte visual de la lógica de la aplicación y de la gestión de datos.
 
-### Gestión de préstamos
+De forma general, el proyecto se divide en:
 
-![Gestión de préstamos](docs/img/prestamos.png)
+* Modelo: clases que representan los datos principales, como los libros.
+* Vista: pantallas e interfaz gráfica desarrolladas con JavaFX.
+* Controlador: clases encargadas de conectar la interfaz con la lógica de la aplicación.
+* Persistencia: almacenamiento local de la información de la biblioteca.
 
-## Tecnologías utilizadas
+Objetivo del proyecto
 
-El proyecto ha sido desarrollado utilizando las siguientes tecnologías:
+El objetivo principal de OpenBiblio es desarrollar una aplicación completa que permita al usuario gestionar su colección de libros de forma sencilla, visual y organizada.
 
-- Java 8
-- JavaFX
-- Maven
-- Git
-- GitHub
+Estructura del proyecto
 
-## Diseño de la aplicación
-
-La aplicación sigue una estructura basada en el patrón Modelo-Vista-Controlador (MVC), lo que permite separar la lógica de negocio de la interfaz gráfica y facilita el mantenimiento del código.
-
-La documentación técnica detallada puede consultarse en la carpeta `docs`.
-
-## Sistema de licencias
-
-Durante el desarrollo del proyecto se ha incorporado un sistema de licencias que permite controlar la distribución y el acceso a determinadas funcionalidades de la aplicación.
-
-Este sistema incluye:
-
-- Generación de claves de licencia.
-- Validación de licencias durante la ejecución.
-- Restricción de funcionalidades según el tipo de licencia.
-- Comprobaciones de integridad básicas.
-
-La implementación de este sistema ha servido para estudiar mecanismos habituales en aplicaciones comerciales.
-
-## Estructura del proyecto
-
-```text
 openBiblio/
 │
 ├── src/
@@ -69,53 +53,48 @@ openBiblio/
 ├── README.md
 ├── LICENSE
 └── pom.xml
-```
 
-## Instalación
+Instalación
 
-### Requisitos
+Requisitos
 
-- Java 8.
-- Maven 3.x.
+* Java 8.
+* Maven 3.x.
+* Git, para clonar el repositorio.
 
-### Clonar el repositorio
+Clonar el repositorio
 
-```bash
 git clone https://github.com/albertoruffy/openBiblio.git
-```
 
-### Compilar el proyecto
+Compilar el proyecto
 
-```bash
 mvn clean package
-```
 
-### Ejecutar la aplicación
+Ejecutar la aplicación
 
-```bash
 mvn javafx:run
-```
 
-## Documentación
+También se puede importar el proyecto en Eclipse y ejecutarlo desde el propio entorno de desarrollo.
 
-La carpeta `docs` contiene documentación adicional sobre el proyecto:
+Documentación
 
-- Arquitectura de la aplicación.
-- Guía de instalación.
-- Diagramas UML.
-- Memoria del proyecto.
-- Planificación y futuras mejoras.
+La carpeta docs contiene documentación adicional del proyecto:
 
-## Objetivos del proyecto
+* Guía de instalación.
+* Arquitectura de la aplicación.
+* Diagramas UML.
+* Memoria del proyecto.
+* Planificación y futuras mejoras.
 
-Los principales objetivos perseguidos durante el desarrollo han sido:
+Autores
 
-- Aplicar los conceptos estudiados en la asignatura.
-- Desarrollar una aplicación completa utilizando programación orientada a objetos.
-- Diseñar una interfaz gráfica funcional y fácil de utilizar.
-- Aprender a trabajar con control de versiones mediante Git.
-- Documentar adecuadamente el desarrollo del software.
+Proyecto desarrollado por:
 
-## Licencia
+* Carlos Vallecillo Jiménez
+* Adrián Ramos Godino
+* Alberto Osorio Bautista
+* Rosario 
 
-Este proyecto ha sido desarrollado con fines exclusivamente académicos.
+Licencia
+
+Este proyecto ha sido desarrollado con fines académicos.
