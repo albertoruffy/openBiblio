@@ -11,11 +11,10 @@ OpenBiblio utiliza SQLite como sistema de almacenamiento local.
 
 ### Libro
 
-Representa un libro registrado por el usuario.
+Representa un libro registrado por el usuario en su biblioteca personal.
 
-Campos esperados:
+Información asociada:
 
-- id
 - título
 - autor
 - ISBN
