@@ -1,13 +1,23 @@
 # Roadmap
 
-## Mejoras futuras
+## Próximas mejoras
 
-- Mejorar la interfaz gráfica.
-- Añadir estadísticas de lectura.
-- Exportar listados a PDF.
-- Exportar listados a Excel.
-- Añadir sistema de usuarios.
-- Mejorar recomendaciones.
-- Añadir sincronización en la nube.
-- Añadir pruebas unitarias.
-- Crear instalador de escritorio.
+### Corto plazo
+
+* Mejorar la interfaz gráfica JavaFX.
+* Optimizar búsquedas.
+* Añadir validaciones avanzadas.
+
+### Medio plazo
+
+* Estadísticas de lectura.
+* Exportación PDF.
+* Etiquetas personalizadas.
+
+### Largo plazo
+
+* Sincronización en la nube.
+* Aplicación móvil.
+* Sistema multiusuario.
+* Integración con Goodreads.
+* Recomendaciones basadas en IA.
