@@ -39,5 +39,3 @@
 2. FtpBackupService genera el respaldo.
 3. El archivo se almacena remotamente..
 
-8.
-9. as.
