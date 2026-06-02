@@ -104,9 +104,7 @@ El usuario puede:
     Añadir notas.
 Los cambios se guardan automáticamente en la base de datos.
 
-
 Futuras mejoras
-
 *Sistema de usuarios.
 *Sincronización en la nube.
 *Estadísticas de lectura.
