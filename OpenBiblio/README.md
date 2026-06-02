@@ -15,6 +15,9 @@ Exportación de listados.
 Recomendaciones y enlaces relacionados con libros.
 Almacenamiento local mediante SQLite.
 Interfaz gráfica desarrollada con JavaFX.
+Copias de seguridad mediante FTP.
+Arquitectura por capas.
+Gestión de estilos mediante CSS
 
 Funcionalidades
 
