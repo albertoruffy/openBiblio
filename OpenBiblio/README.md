@@ -119,11 +119,12 @@ Documentación
 
 La carpeta docs contiene documentación adicional del proyecto:
 
-* Guía de instalación.
-* Arquitectura de la aplicación.
-* Diagramas UML.
-* Memoria del proyecto.
-* Planificación y futuras mejoras.
+- [Arquitectura](docs/arquitectura.md)
+- [Instalación](docs/instalacion.md)
+- [Casos de uso](docs/casos-de-uso.md)
+- [Base de datos](docs/base-de-datos.md)
+- [Roadmap](docs/roadmap.md)
+
 
 Autores
 
