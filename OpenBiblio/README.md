@@ -93,24 +93,24 @@ También se puede importar el proyecto en Eclipse/Netbeans y ejecutarlo desde el
 
 Funcionamiento general
 
-El usuario inicia la aplicación.
-Se carga la base de datos SQLite local.
-La interfaz muestra el catálogo disponible.
-El usuario puede:
+* El usuario inicia la aplicación.
+* Se carga la base de datos SQLite local.
+* La interfaz muestra el catálogo disponible.
+* El usuario puede:
     Añadir libros.
     Editar registros.
     Eliminar libros.
     Buscar información.
     Añadir notas.
-Los cambios se guardan automáticamente en la base de datos.
+* Los cambios se guardan automáticamente en la base de datos.
 
 Futuras mejoras
-*Sistema de usuarios.
-*Sincronización en la nube.
-*Estadísticas de lectura.
-*Importación desde ISBN.
-*Integración con APIs bibliográficas.
-*Exportación avanzada a PDF y Excel.
+* Sistema de usuarios.
+* Sincronización en la nube.
+* Estadísticas de lectura.
+* Importación desde ISBN.
+* Integración con APIs bibliográficas.
+*  Exportación avanzada a PDF y Excel.
 
 Documentación
 
@@ -132,6 +132,6 @@ Proyecto desarrollado por:
 * Rosario Garifa Ccapira
 
 Licencia
-
+Proyecto desarrollado con fines académicos y formativos.
 Proyecto desarrollado con fines académicos y formativos.
 Este proyecto ha sido desarrollado con fines académicos.
