@@ -29,9 +29,10 @@ Actualmente el proyecto está orientado a las siguientes funcionalidades:
 * Consulta del detalle de cada libro.
 * Gestión del estado de lectura.
 * Añadir notas personales o citas.
-* Exportación de listados.
-* Recomendaciones o enlaces relacionados con libros.
+* Importación y Exportación CVS.
+* Recomendaciones o enlaces relacionados con libros, basadas en la colección actual y Actualización dinámica de sugerencias.
 * Interfaz gráfica desarrollada con JavaFX.
+* Copia de Seguridad: Backup remoto mediante FTP y Restauración de copias de seguridad.
 
 * Tecnologías utilizadas
 
