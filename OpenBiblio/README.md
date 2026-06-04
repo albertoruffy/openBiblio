@@ -140,6 +140,4 @@ Proyecto desarrollado por:
 * Rosario Garifa Ccapira
 
 ## Licencia
-Proyecto desarrollado con fines académicos y formativos.
-Proyecto desarrollado con fines académicos y formativos.
 Este proyecto ha sido desarrollado con fines académicos.
